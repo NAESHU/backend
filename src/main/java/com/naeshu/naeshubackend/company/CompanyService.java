@@ -1,6 +1,7 @@
 package com.naeshu.naeshubackend.company;
 
 import com.naeshu.naeshubackend.common.ConflictException;
+import com.naeshu.naeshubackend.common.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,4 +20,10 @@ public class CompanyService {
         companyRepository.save(company);
     }
 
+    public Long login(String companyId, String companyPassword) {
+        Company company = companyRepository.findByCompanyId(companyId)
+                .orElseThrow(() -> new UnAuthorizedException("존재하지 않은 아이디입니다."));
+        company.login(companyPassword);
+        return company.getId();
+    }
 }

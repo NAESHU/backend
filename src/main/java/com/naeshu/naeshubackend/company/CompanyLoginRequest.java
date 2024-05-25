@@ -1,6 +1,8 @@
 package com.naeshu.naeshubackend.company;
 
-public record CompanyRequest(
+import lombok.Getter;
+
+public record CompanyLoginRequest(
     String companyId, String companyPassword
 ) {
 }
