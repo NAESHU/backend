@@ -5,6 +5,7 @@ import com.naeshu.naeshubackend.common.UnAuthorizedException;
 import com.naeshu.naeshubackend.company.Company;
 import com.naeshu.naeshubackend.company.CompanyRepository;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,5 +32,22 @@ public class AnnouncementService {
                 .build();
 
         announcementRepository.save(announcement);
+    }
+
+    public List<AnnouncementResponse> findAll() {
+        List<Announcement> announcements = announcementRepository.findAll();
+        return announcements.stream()
+                .map((announcement -> new AnnouncementResponse(
+                        announcement.getId(),
+                        announcement.getTitle(),
+                        announcement.getContent(),
+                        announcement.getOpinionPrice(),
+                        announcement.getCommentPrice(),
+                        announcement.getCreatedAt(),
+                        announcement.getDeadline(),
+                        announcement.getBidStatus(),
+                        announcement.getCompany().getId()
+                )))
+                .toList();
     }
 }

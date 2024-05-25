@@ -2,10 +2,13 @@ package com.naeshu.naeshubackend.announcement;
 
 import com.naeshu.naeshubackend.auth.Auth;
 import com.naeshu.naeshubackend.auth.jwt.JwtService;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,4 +37,9 @@ public class AnnouncementController {
         );
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<AnnouncementResponse>> findAll() {
+        List<AnnouncementResponse> response = announcementService.findAll();
+        return ResponseEntity.ok(response);
+    }
 }
