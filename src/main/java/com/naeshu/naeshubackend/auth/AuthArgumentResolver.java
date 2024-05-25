@@ -21,7 +21,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         boolean b = parameter.hasParameterAnnotation(Auth.class);
-        boolean equals = parameter.getParameterType().equals(Long.class);
+        boolean equals = parameter.getParameterType().equals(AuthInfo.class);
         return b && equals;
     }
 
@@ -33,9 +33,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
             WebDataBinderFactory binderFactory
     ) {
         String accessToken = extractAccessToken(webRequest);
-        Long userId = jwtService.extractMemberId(accessToken);
-        String role = jwtService.extractRole(accessToken);
-        return new UserIdRoleResponse(userId, role);
+        return jwtService.extractMemberId(accessToken);
     }
 
     private static String extractAccessToken(NativeWebRequest request) {

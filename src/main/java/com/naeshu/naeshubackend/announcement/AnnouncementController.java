@@ -1,7 +1,9 @@
 package com.naeshu.naeshubackend.announcement;
 
 import com.naeshu.naeshubackend.auth.Auth;
+import com.naeshu.naeshubackend.auth.AuthInfo;
 import com.naeshu.naeshubackend.auth.jwt.JwtService;
+import com.naeshu.naeshubackend.common.UnAuthorizedException;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,10 +28,11 @@ public class AnnouncementController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register")
     public void create(
-            @Auth Long companyId,
+            @Auth AuthInfo authInfo,
             @RequestBody AnnouncementCreateRequest request) {
+        verifyRole(authInfo);
         announcementService.create(
-                companyId,
+                authInfo.memberId(),
                 request.getTitle(),
                 request.getContent(),
                 request.getOpinionPrice(),
@@ -50,5 +53,11 @@ public class AnnouncementController {
     ) {
         AnnouncementResponse response = announcementService.findById(announceId);
         return ResponseEntity.ok(response);
+    }
+
+    private void verifyRole(AuthInfo authInfo) {
+        if (!authInfo.role().equals("COMPANY")) {
+            throw new UnAuthorizedException("COMPANY 권한이 아닙니다.");
+        }
     }
 }

@@ -1,13 +1,16 @@
 package com.naeshu.naeshubackend.user.controller;
 
 import com.naeshu.naeshubackend.auth.Auth;
+import com.naeshu.naeshubackend.auth.AuthInfo;
 import com.naeshu.naeshubackend.auth.jwt.JwtService;
+import com.naeshu.naeshubackend.common.UnAuthorizedException;
 import com.naeshu.naeshubackend.user.dto.request.UserLoginRequest;
 import com.naeshu.naeshubackend.user.dto.request.UserSignUpRequest;
 import com.naeshu.naeshubackend.user.dto.response.UserInfoResponse;
 import com.naeshu.naeshubackend.user.dto.response.UserLoginResponse;
 import com.naeshu.naeshubackend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/naeshu/user")
+@Slf4j
 public class UserController {
     private final UserService userService;
     private final JwtService jwtService;
@@ -35,11 +39,19 @@ public class UserController {
         return ResponseEntity.ok(new UserLoginResponse(accessToken));
     }
 
-    @GetMapping
-    public ResponseEntity<UserInfoResponse> getUserInfo(@Auth Long userId,
-                                                        @Auth String ROLE){
-        String userName = userService.findName(userId);
-        UserInfoResponse userInfoResponse = new UserInfoResponse(userName, ROLE);
+    @GetMapping("/")
+    public ResponseEntity<UserInfoResponse> getUserInfo(@Auth AuthInfo authInfo){
+        String role = verifyRole(authInfo);
+        String userName = userService.findNameById(authInfo.memberId());
+        UserInfoResponse userInfoResponse = new UserInfoResponse(userName, role);
         return ResponseEntity.ok(userInfoResponse);
+    }
+
+    private String verifyRole(AuthInfo authInfo) {
+        log.info("{}", authInfo.role());
+        if (authInfo.role().equals("USER")) {
+            return "USER";
+        }
+        return "COMPANY";
     }
 }
