@@ -17,4 +17,12 @@ public class ExceptionAdvice {
                 HttpStatusCode.valueOf(HttpStatus.UNAUTHORIZED.value())
         );
     }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ExceptionResponse> handle(ConflictException e) {
+        return new ResponseEntity<>(
+                new ExceptionResponse(e.getMessage()),
+                HttpStatusCode.valueOf(HttpStatus.CONFLICT.value())
+        );
+    }
 }
