@@ -1,3 +1,7 @@
+jwt:
+  secretKey: Q05VLUxJS0UtTElPTi1BUFBMSUNBVElPTi1TRUNSRVQtS0VZ
+  accessTokenExpirationDay: 100 # 100일로 설정
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
