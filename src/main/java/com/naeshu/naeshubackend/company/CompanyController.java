@@ -34,7 +34,7 @@ public class CompanyController {
                 request.companyId(),
                 request.companyPassword()
         );
-        String accessToken = jwtService.createToken(companyId);
+        String accessToken = jwtService.createToken(companyId, "COMPANY");
         return ResponseEntity.ok(new CompanyLoginResponse(accessToken));
     }
 }

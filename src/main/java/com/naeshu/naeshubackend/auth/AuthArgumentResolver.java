@@ -2,6 +2,7 @@ package com.naeshu.naeshubackend.auth;
 
 import com.naeshu.naeshubackend.auth.jwt.JwtService;
 import com.naeshu.naeshubackend.common.UnAuthorizedException;
+import com.naeshu.naeshubackend.user.dto.response.UserIdRoleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,9 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
             WebDataBinderFactory binderFactory
     ) {
         String accessToken = extractAccessToken(webRequest);
-        return jwtService.extractMemberId(accessToken);
+        Long userId = jwtService.extractMemberId(accessToken);
+        String role = jwtService.extractRole(accessToken);
+        return new UserIdRoleResponse(userId, role);
     }
 
     private static String extractAccessToken(NativeWebRequest request) {

@@ -10,8 +10,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
 public class Opinion {
 
     @Id
@@ -25,4 +27,11 @@ public class Opinion {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "announcement_id")
     private Announcement announcement;
+
+    public Opinion(String content, LocalDate createdAt, User user, Announcement announcement) {
+        this.content = content;
+        this.createdAt = createdAt;
+        this.user = user;
+        this.announcement = announcement;
+    }
 }

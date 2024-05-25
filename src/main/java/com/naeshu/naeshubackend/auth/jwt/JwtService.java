@@ -18,13 +18,14 @@ public class JwtService {
         this.algorithm = Algorithm.HMAC512(jwtProperty.secretKey());
     }
 
-    public String createToken(Long memberId) {
+    public String createToken(Long memberId, String role) {
         return JWT.create()
                 .withExpiresAt(new Date(
                         accessTokenExpirationDayToMills + System.currentTimeMillis()
                 ))
                 .withIssuedAt(new Date())
                 .withClaim("memberId", memberId)
+                .withClaim("ROLE", role)
                 .sign(algorithm);
     }
 
@@ -35,6 +36,18 @@ public class JwtService {
                     .verify(token)
                     .getClaim("memberId")
                     .asLong();
+        } catch (JWTVerificationException e) {
+            throw new UnAuthorizedException("유효하지 않은 토큰입니다.");
+        }
+    }
+
+    public String extractRole(String token) {
+        try {
+            return JWT.require(algorithm)
+                    .build()
+                    .verify(token)
+                    .getClaim("ROLE")
+                    .asString();
         } catch (JWTVerificationException e) {
             throw new UnAuthorizedException("유효하지 않은 토큰입니다.");
         }
