@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +41,14 @@ public class AnnouncementController {
     @GetMapping("/all")
     public ResponseEntity<List<AnnouncementResponse>> findAll() {
         List<AnnouncementResponse> response = announcementService.findAll();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{announceId}")
+    public ResponseEntity<AnnouncementResponse> findById(
+            @PathVariable("announceId") Long announceId
+    ) {
+        AnnouncementResponse response = announcementService.findById(announceId);
         return ResponseEntity.ok(response);
     }
 }

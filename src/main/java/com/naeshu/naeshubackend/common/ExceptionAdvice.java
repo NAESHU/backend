@@ -25,4 +25,12 @@ public class ExceptionAdvice {
                 HttpStatusCode.valueOf(HttpStatus.CONFLICT.value())
         );
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handle(NotFoundException e) {
+        return new ResponseEntity<>(
+                new ExceptionResponse(e.getMessage()),
+                HttpStatusCode.valueOf(HttpStatus.NOT_FOUND.value())
+        );
+    }
 }

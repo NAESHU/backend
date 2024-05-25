@@ -1,11 +1,13 @@
 package com.naeshu.naeshubackend.announcement;
 
 import com.naeshu.naeshubackend.common.BidStatus;
+import com.naeshu.naeshubackend.common.NotFoundException;
 import com.naeshu.naeshubackend.common.UnAuthorizedException;
 import com.naeshu.naeshubackend.company.Company;
 import com.naeshu.naeshubackend.company.CompanyRepository;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -49,5 +51,21 @@ public class AnnouncementService {
                         announcement.getCompany().getId()
                 )))
                 .toList();
+    }
+
+    public AnnouncementResponse findById(Long announceId) {
+        Announcement announcement = announcementRepository.findById(announceId)
+                .orElseThrow(() -> new NotFoundException("주어진 아이디의 공고가 존재하지 않습니다."));
+         return new AnnouncementResponse(
+                announcement.getId(),
+                announcement.getTitle(),
+                announcement.getContent(),
+                announcement.getOpinionPrice(),
+                announcement.getCommentPrice(),
+                announcement.getCreatedAt(),
+                announcement.getDeadline(),
+                announcement.getBidStatus(),
+                announcement.getCompany().getId()
+        );
     }
 }
