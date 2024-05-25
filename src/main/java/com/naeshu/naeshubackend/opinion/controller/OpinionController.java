@@ -39,10 +39,9 @@ public class OpinionController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/{announceNumber}/{opinionId}")
+    @GetMapping("/{announceNumber}")
     public ResponseEntity<List<OpinionResponse>> findAllByAnnouncement(
             @PathVariable("announceNumber") Long announceId,
-            @PathVariable("opinionId") Long opinionId,
             @Auth AuthInfo authInfo
     ) {
         List<OpinionResponse> optionResponseList = opinionService.findAllByAnnouncement(announceId);
