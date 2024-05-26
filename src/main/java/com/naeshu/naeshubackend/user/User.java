@@ -35,4 +35,8 @@ public class User {
         }
         throw new UnAuthorizedException("비밀번호가 일치하지 않습니다.");
     }
+
+    public void updatePoint(Long userPoint) {
+        this.userPoint = userPoint;
+    }
 }

@@ -1,9 +1,12 @@
 package com.naeshu.naeshubackend.company;
 
+import com.naeshu.naeshubackend.auth.Auth;
+import com.naeshu.naeshubackend.auth.AuthInfo;
 import com.naeshu.naeshubackend.auth.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,5 +39,13 @@ public class CompanyController {
         );
         String accessToken = jwtService.createToken(companyId, "COMPANY");
         return ResponseEntity.ok(new CompanyLoginResponse(accessToken));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<CompanyInfoResponse> getCompanyInfo(@Auth AuthInfo authInfo){
+        String role = authInfo.role();
+        String companyName = companyService.findNameById(authInfo.memberId());
+        CompanyInfoResponse companyInfoResponse = new CompanyInfoResponse(companyName, role);
+        return ResponseEntity.ok(companyInfoResponse);
     }
 }

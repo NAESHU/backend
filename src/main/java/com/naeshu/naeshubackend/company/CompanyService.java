@@ -26,4 +26,8 @@ public class CompanyService {
         company.login(companyPassword);
         return company.getId();
     }
+
+    public String findNameById(Long userId){
+        return companyRepository.findById(userId).get().getCompanyName();
+    }
 }

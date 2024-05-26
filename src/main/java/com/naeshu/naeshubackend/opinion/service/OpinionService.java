@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -49,10 +50,16 @@ public class OpinionService {
                 .toList();
     }
 
-    public void selectOpinion(Long announceId, Long opinionId) {
+    @Transactional
+    public void selectOpinion(Long memberId, Long announceId, Long opinionId) {
         Opinion opinion = opinionRepository.findById(opinionId)
                 .orElseThrow(() -> new NotFoundException("찾으려는 의견글을 찾을 수 없습니다."));
         opinion.selectOpinion();
         opinionRepository.save(opinion);
+        Long price = opinion.getAnnouncement().getOpinionPrice();
+        User user = userRepository.findById(memberId).get();
+        Long point = user.getUserPoint() + price;
+        user.updatePoint(point);
+        userRepository.save(user);
     }
 }

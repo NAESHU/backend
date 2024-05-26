@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @RequiredArgsConstructor
@@ -55,7 +54,7 @@ public class OpinionController {
             @Auth AuthInfo authInfo
     ) {
         verifyCompanyRole(authInfo);
-        opinionService.selectOpinion(announceId, opinionId);
+        opinionService.selectOpinion(authInfo.memberId(), announceId, opinionId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
